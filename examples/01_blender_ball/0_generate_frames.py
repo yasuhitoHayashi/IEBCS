@@ -42,6 +42,7 @@ sphere.keyframe_insert(data_path="location", frame=30)
 # Add camera
 bpy.ops.object.camera_add(location=(0.5, 0.5, -1))
 cam = bpy.context.object
+scene.camera = cam
 track = cam.constraints.new(type='TRACK_TO')
 track.target = center
 track.track_axis = 'TRACK_NEGATIVE_Z'
@@ -53,7 +54,7 @@ light = bpy.context.object
 light.data.energy = 1000
 
 # Directory for rendered frames
-frames_dir = os.path.join(os.path.dirname(bpy.data.filepath), "frames")
+frames_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frames")
 os.makedirs(frames_dir, exist_ok=True)
 
 # Render all frames
