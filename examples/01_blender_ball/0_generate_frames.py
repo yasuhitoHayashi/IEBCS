@@ -39,8 +39,8 @@ sphere.keyframe_insert(data_path="location", frame=1)
 sphere.location = (1, 0.5, -0.3)
 sphere.keyframe_insert(data_path="location", frame=30)
 
-# Add camera
-bpy.ops.object.camera_add(location=(0.5, 0.5, -1))
+# Add camera inside the cube
+bpy.ops.object.camera_add(location=(0.5, 0.5, -0.8))
 cam = bpy.context.object
 scene.camera = cam
 track = cam.constraints.new(type='TRACK_TO')
@@ -48,8 +48,8 @@ track.target = center
 track.track_axis = 'TRACK_NEGATIVE_Z'
 track.up_axis = 'UP_Y'
 
-# Light 0.3m above the camera
-bpy.ops.object.light_add(type='POINT', location=(0.5, 0.8, -1))
+# Light 0.3m above the camera inside the cube
+bpy.ops.object.light_add(type='POINT', location=(0.5, 0.8, -0.8))
 light = bpy.context.object
 light.data.energy = 1000
 
