@@ -103,9 +103,6 @@ for frame in range(scene.frame_start, scene.frame_end + 1):
 # Finalize video file
 video.release()
 
-# Clean temporary frame
-if os.path.exists(TMP_IMAGE):
-    os.remove(TMP_IMAGE)
 
 buffer.write(EVENT_FILE, width=WIDTH, height=HEIGHT)
 print(f"Generated event file: {EVENT_FILE}")
