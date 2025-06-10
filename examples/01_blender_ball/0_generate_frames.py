@@ -5,9 +5,9 @@ import os
 scene = bpy.context.scene
 scene.frame_start = 1
 scene.frame_end = 30
-scene.render.fps = 30
-scene.render.resolution_x = 640
-scene.render.resolution_y = 480
+scene.render.fps = 15
+scene.render.resolution_x = 1280
+scene.render.resolution_y = 720
 scene.render.image_settings.file_format = 'PNG'
 
 # Remove default objects

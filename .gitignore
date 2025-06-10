@@ -6,3 +6,4 @@ src/__pycache__/*
 /examples/00_video_2_events/outputs/
 /examples/01_blender_ball/frames
 /examples/01_blender_ball/outputs
+/examples/02_ballTest/output
