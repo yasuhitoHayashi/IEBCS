@@ -14,6 +14,7 @@ OUTPUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "output")
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 TMP_IMAGE = os.path.join(OUTPUT_DIR, "tmp.png")
 EVENT_FILE = os.path.join(OUTPUT_DIR, "ball_events.dat")
+VIDEO_FILE = os.path.join(OUTPUT_DIR, "ball_video.avi")
 
 # Sensor/image parameters
 WIDTH = 640
@@ -79,16 +80,19 @@ sensor.init_bgn_hist("../../data/noise_pos_161lux.npy", "../../data/noise_neg_16
 
 buffer = EventBuffer(1)
 dt = int(1e6 / FPS)
+fourcc = cv2.VideoWriter_fourcc(*"MJPG")
+video = cv2.VideoWriter(VIDEO_FILE, fourcc, FPS, (WIDTH, HEIGHT))
 
 for frame in range(scene.frame_start, scene.frame_end + 1):
     scene.frame_set(frame)
     scene.render.filepath = TMP_IMAGE
     bpy.ops.render.render(write_still=True)
 
-    img = cv2.imread(TMP_IMAGE, cv2.IMREAD_GRAYSCALE)
-    if img is None:
+    color = cv2.imread(TMP_IMAGE)
+    if color is None:
         raise RuntimeError(f"Failed to load rendered frame {frame}")
-    img = img.astype(np.float32) / 255.0 * 1e4
+    video.write(color)
+    img = cv2.cvtColor(color, cv2.COLOR_BGR2GRAY).astype(np.float32) / 255.0 * 1e4
 
     if frame == scene.frame_start:
         sensor.init_image(img)
@@ -96,9 +100,10 @@ for frame in range(scene.frame_start, scene.frame_end + 1):
         events = sensor.update(img, dt)
         buffer.increase_ev(events)
 
-# Clean temporary frame
-if os.path.exists(TMP_IMAGE):
-    os.remove(TMP_IMAGE)
+# Finalize video file
+video.release()
+
 
 buffer.write(EVENT_FILE, width=WIDTH, height=HEIGHT)
 print(f"Generated event file: {EVENT_FILE}")
+print(f"Generated video: {VIDEO_FILE}")

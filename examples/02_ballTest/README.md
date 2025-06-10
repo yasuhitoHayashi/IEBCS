@@ -11,4 +11,4 @@ blender -b -P ball_test.py
 ```
 
 An output directory will be created next to the script containing the generated
-`ball_events.dat` file.
+`ball_events.dat` file and a video `ball_video.avi` showing the rendered frames.
