@@ -7,3 +7,5 @@ src/__pycache__/*
 /examples/01_blender_ball/frames
 /examples/01_blender_ball/outputs
 /examples/02_ballTest/output
+/examples/04_ball/output_ball
+/examples/03_marineSnow/output_marine_snow
