@@ -17,7 +17,7 @@ os.makedirs(base_path, exist_ok=True)
 # Sensor and animation parameters
 sensor_width = 1280
 sensor_height = 720
-frames = 150
+frames = 120
 
 # Ball movement from left to right
 start_pos = Vector((-5.0, 0.0, 0.0))
@@ -66,12 +66,13 @@ light_obj.location = cam.location + Vector((0, 0, 2))
 
 # Render settings
 scene = bpy.context.scene
-scene.render.engine = 'CYCLES'
+scene.render.engine = 'BLENDER_EEVEE'
 scene.render.resolution_x = sensor_width
 scene.render.resolution_y = sensor_height
 scene.render.image_settings.file_format = 'PNG'
 scene.frame_start = 0
 scene.frame_end = frames - 1
+scene.cycles.device = 'GPU'
 
 # Initialise sensor
 sensor = DvsSensor("BallSensor")
@@ -87,7 +88,6 @@ for frame in range(frames):
     scene.frame_set(frame)
     ball.location = start_pos + delta * frame
     ball.keyframe_insert(data_path="location")
-
     scene.render.filepath = tmp_image_path
     bpy.ops.render.render(write_still=True)
     color = cv2.imread(tmp_image_path)
