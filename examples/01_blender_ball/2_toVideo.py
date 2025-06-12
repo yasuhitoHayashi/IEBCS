@@ -12,7 +12,7 @@ filename = './outputs/ball_events.dat'
 ts, x, y, p = load_dat_event(filename)
 res = [1280, 720]
 out = cv2.VideoWriter('{}.avi'.format(filename[:-4]), fourcc, 20.0, (res[0], res[1]))
-tw = 1000
+tw = 10
 img         = np.zeros((res[1], res[0]), dtype=float)
 tsurface    = np.zeros((res[1], res[0]), dtype=np.int64)
 indsurface  = np.zeros((res[1], res[0]), dtype=np.int8)

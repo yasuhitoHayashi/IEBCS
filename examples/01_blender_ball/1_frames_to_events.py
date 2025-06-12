@@ -24,8 +24,8 @@ if not frame_files:
 im = cv2.imread(frame_files[0], cv2.IMREAD_GRAYSCALE)
 height, width = im.shape
 
-th_pos = 0.4        # ON threshold = 50% (ln(1.5) = 0.4)
-th_neg = 0.4        # OFF threshold = 50%
+th_pos = 0.01        # ON threshold = 50% (ln(1.5) = 0.4)
+th_neg = 0.01       # OFF threshold = 50%
 th_noise= 0.01      # standard deviation of threshold noise
 lat = 100           # latency in us
 tau = 40            # front-end time constant at 1 klux in us
@@ -33,7 +33,7 @@ jit = 10            # temporal jitter standard deviation in us
 bgnp = 0.1          # ON event noise rate in events / pixel / s
 bgnn = 0.01         # OFF event noise rate in events / pixel / s
 ref = 100           # refractory period in us
-dt = 1000           # time between frames in us
+dt = 1           # time between frames in us
 time = 0
 
 
@@ -45,7 +45,7 @@ sensor.init_bgn_hist("../../data/noise_pos_161lux.npy", "../../data/noise_neg_16
 
 sensor.init_image(im.astype(np.float32) / 255.0 * 1e4)
 
-dt = 1e6 / 15.0  # microseconds per frame at 30 fps
+dt = 1e6 / 120  # microseconds per frame at 30 fps
 buffer = EventBuffer(1)
 ea = SynchronousArbiter(0.1, time, im.shape[0])  # DVS346-like arbiter
 

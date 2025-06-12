@@ -7,7 +7,7 @@ import math
 # ----------------------------
 
 # Output frame rate (frames per second)
-FPS = 15
+FPS = 120
 
 # Output resolution
 RESOLUTION_X = 1280
