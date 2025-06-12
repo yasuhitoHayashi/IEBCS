@@ -1,5 +1,6 @@
 import bpy
 import cv2
+import math
 import os
 import sys
 from mathutils import Vector
@@ -116,4 +117,3 @@ print(f"Generated video: {video_path}")
 
 if os.path.exists(tmp_image_path):
     os.remove(tmp_image_path)
-
