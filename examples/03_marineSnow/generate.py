@@ -3,14 +3,11 @@ import cv2
 import math
 import os
 import sys
-import random
 from mathutils import Vector
 
 # モジュールのパスを追加（オリジナルコードと同じディレクトリ構成の場合）
 sys.path.append("../../src")
-from dvs_sensor import *
-from dvs_sensor_blender import Blender_DvsSensor
-from event_display import EventDisplay
+from dvs_sensor import DvsSensor
 from event_buffer import EventBuffer
 
 # ---------------------------
@@ -152,13 +149,12 @@ for transparency in transparency_list:
     scene.frame_start = 0
     scene.frame_end   = frames - 1
     
-    ppsee = Blender_DvsSensor("Sensor")
-    ppsee.set_sensor(nx=sensor_width, ny=sensor_height, pp=0.015)
-    ppsee.set_dvs_sensor(th_pos=0.15, th_neg=0.15, th_n=0.05,
-                         lat=100, tau=300, jit=100, bgn=0.0001)
-    ppsee.set_sensor_optics(8)
-    
-    ed = EventDisplay("Events", sensor_width, sensor_height, 10000)
+    dvs = DvsSensor("MarineSnowSensor")
+    dvs.initCamera(sensor_width, sensor_height,
+                   lat=100, jit=100, ref=100, tau=300,
+                   th_pos=0.15, th_neg=0.15, th_noise=0.05,
+                   bgnp=0.0001, bgnn=0.0001)
+
     ev = EventBuffer(0)
     
     # ----------------------------------------
@@ -176,15 +172,16 @@ for transparency in transparency_list:
         # レンダリング→画像読み込み→DVS入力
         scene.render.filepath = tmp_image_path
         bpy.ops.render.render(write_still=True)
-        img = cv2.imread(tmp_image_path)
-        if img is None:
+        color = cv2.imread(tmp_image_path)
+        if color is None:
             raise RuntimeError(f"Failed to load rendered image: {tmp_image_path}")
-        
+        img = cv2.cvtColor(color, cv2.COLOR_BGR2GRAY).astype(float) / 255.0 * 1e4
+
         if frame == 0:
-            ppsee.init_image(img)
+            dvs.init_image(img)
         else:
-            pk = ppsee.update(img, 1000)
-            ev.increase_ev(pk)
+            events = dvs.update(img, 1000)
+            ev.increase_ev(events)
     
     # イベントデータ書き出し
     if ev.i > 0:
