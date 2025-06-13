@@ -4,6 +4,34 @@ import os
 import sys
 from mathutils import Vector
 
+
+def set_visibility(obj, *, camera=None, shadow=None):
+    """Set object visibility, handling Blender versions without cycles."""
+    if camera is not None:
+        if hasattr(obj, "cycles_visibility"):
+            try:
+                obj.cycles_visibility.camera = camera
+            except AttributeError:
+                pass
+        if hasattr(obj, "visible_camera"):
+            try:
+                obj.visible_camera = camera
+            except AttributeError:
+                pass
+        if not (hasattr(obj, "cycles_visibility") or hasattr(obj, "visible_camera")):
+            obj.hide_render = not camera
+    if shadow is not None:
+        if hasattr(obj, "cycles_visibility"):
+            try:
+                obj.cycles_visibility.shadow = shadow
+            except AttributeError:
+                pass
+        if hasattr(obj, "visible_shadow"):
+            try:
+                obj.visible_shadow = shadow
+            except AttributeError:
+                pass
+
 # Add module path
 sys.path.append("../../src")
 from dvs_sensor import DvsSensor
@@ -100,8 +128,7 @@ for frame in range(frames):
     # ----------------------
     # Object-only rendering
     # ----------------------
-    ball.cycles_visibility.shadow = False
-    ball.cycles_visibility.camera = True
+    set_visibility(ball, camera=True, shadow=False)
     backdrop.cycles.is_shadow_catcher = False
     scene.render.film_transparent = False
     scene.render.filepath = tmp_obj_path
@@ -120,8 +147,7 @@ for frame in range(frames):
     # ----------------------
     # Shadow-only rendering
     # ----------------------
-    ball.cycles_visibility.shadow = True
-    ball.cycles_visibility.camera = False
+    set_visibility(ball, camera=False, shadow=True)
     backdrop.cycles.is_shadow_catcher = True
     scene.render.film_transparent = True
     scene.render.filepath = tmp_shadow_path
@@ -151,8 +177,7 @@ else:
     print("No shadow events generated.")
 
 # Output video
-ball.cycles_visibility.camera = True
-ball.cycles_visibility.shadow = True
+set_visibility(ball, camera=True, shadow=True)
 backdrop.cycles.is_shadow_catcher = False
 scene.render.film_transparent = False
 scene.render.image_settings.file_format = 'AVI_JPEG'

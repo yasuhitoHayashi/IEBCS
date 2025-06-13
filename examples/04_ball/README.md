@@ -2,7 +2,7 @@
 
 This script generates a simple animation of a sphere moving from left to right
 
-Run the script with Blender in background mode:
+Run the script with Blender in background mode (the `bpy` package alone may not expose all features used here):
 
 ```bash
 blender -b -P generate.py
