@@ -115,7 +115,6 @@ sensor_shadow.initCamera(sensor_width, sensor_height,
                          lat=100, jit=100, ref=100, tau=300,
                          th_pos=0.15, th_neg=0.15, th_noise=0.05,
                          bgnp=0.0001, bgnn=0.0001)
-
 buffer_obj = EventBuffer(0)
 buffer_shadow = EventBuffer(0)
 
