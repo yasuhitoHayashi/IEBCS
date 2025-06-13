@@ -91,7 +91,7 @@ light_data = bpy.data.lights.new(name="MainLight", type='POINT')
 light_data.energy = 2000
 light_obj = bpy.data.objects.new(name="MainLight", object_data=light_data)
 bpy.context.collection.objects.link(light_obj)
-light_obj.location = cam.location + Vector((0, 0, 2))
+light_obj.location = cam.location + Vector((2, 2, 2))
 
 # Render settings
 scene = bpy.context.scene
@@ -140,7 +140,7 @@ for frame in range(frames):
     if frame == 0:
         sensor_obj.init_image(img_obj)
     else:
-        events = sensor_obj.update(img_obj, 1000)
+        events = sensor_obj.update(img_obj, 10000)
         buffer_obj.increase_ev(events)
 
     # ----------------------
@@ -159,7 +159,7 @@ for frame in range(frames):
     if frame == 0:
         sensor_shadow.init_image(img_shadow)
     else:
-        events = sensor_shadow.update(img_shadow, 1000)
+        events = sensor_shadow.update(img_shadow, 10000)
         buffer_shadow.increase_ev(events)
 
 # Save events
