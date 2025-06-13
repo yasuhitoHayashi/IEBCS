@@ -10,3 +10,5 @@ src/__pycache__/*
 /examples/04_ball/output_ball
 /examples/03_marineSnow/output_marine_snow
 /examples/04_ball/output_ball_original
+/examples/05_ballBlack/output_ball
+/examples/06_room/output_ball
